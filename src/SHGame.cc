@@ -21,8 +21,7 @@ SHGame::SHGame(SHPlayer& shp, SHDealer& shd)
 	player.setLoan(initCredit);
 	dealer.setLoan(initCredit);
 	restart();
-		player.showCards();
-	dealer.showCards();
+
 }
 
 
@@ -35,10 +34,14 @@ SHGame::oneRun()
 	menu.print();
 	switch(menu.getAnswer()){
 		case ONE_MORE:
-			if(gameStatus == IN_PROGRESS)
+			if(gameStatus == IN_PROGRESS){
 					moreCard();
-				else
+					player.showCards();
+					dealer.showCards();
+				}
+				else{
 					cout<<"GAME OVER!"<<endl;
+				}
 				break;
 			case GIVE_UP:
 				if(gameStatus == IN_PROGRESS)
@@ -57,8 +60,7 @@ SHGame::oneRun()
 			case QUIT:
 				return false;
 		}
-	player.showCards();
-	dealer.showCards();
+
 	return true;
 }
 
@@ -69,10 +71,17 @@ SHGame::oneRun()
 void
 SHGame::moreCard()
 {	
+	if(player.getNumCards()==5){
+		cout << "Game already ended!\n";
+		return;
+	}
+
 	Card newCard1(dealer.giveCardID());
 	Card newCard2(dealer.giveCardID());
 	player.addCard(newCard1);
 	dealer.addCard(newCard2);
+
+	
 	if(player.getNumCards()==5){
 		dealer.openFirstCard();
 		endTurn(dealer.judge(player));
@@ -98,8 +107,11 @@ SHGame::restart()
 {
 	player.start();
 	dealer.start();
-	for(int i=0;i<2;++i)
-		moreCard();
+
+	moreCard();
+	moreCard();
+	player.showCards();
+	dealer.showCards();
 	gameStatus = IN_PROGRESS;
 }
 
