@@ -18,9 +18,11 @@ using std::endl;
 SHGame::SHGame(SHPlayer& shp, SHDealer& shd)
 	: menu(sizeof(menuItems)/sizeof(char*), menuItems), player(shp), dealer(shd)
 {
-	gameStatus = FIRST_TURN;
 	player.setLoan(initCredit);
 	dealer.setLoan(initCredit);
+	restart();
+		player.showCards();
+	dealer.showCards();
 }
 
 
@@ -30,13 +32,10 @@ SHGame::SHGame(SHPlayer& shp, SHDealer& shd)
 bool
 SHGame::oneRun()
 {
-	if(gameStatus == FIRST_TURN)
-		restart();
-	else{
-		menu.print();
-		switch(menu.getAnswer()){
-			case ONE_MORE:
-				if(gameStatus == IN_PROGRESS)
+	menu.print();
+	switch(menu.getAnswer()){
+		case ONE_MORE:
+			if(gameStatus == IN_PROGRESS)
 					moreCard();
 				else
 					cout<<"GAME OVER!"<<endl;
@@ -58,7 +57,6 @@ SHGame::oneRun()
 			case QUIT:
 				return false;
 		}
-	}
 	player.showCards();
 	dealer.showCards();
 	return true;
@@ -71,10 +69,10 @@ SHGame::oneRun()
 void
 SHGame::moreCard()
 {	
-	Card newCard(dealer.giveCardID());
-	player.addCard(newCard);
-	newCard.setID(dealer.giveCardID());
-	dealer.addCard(newCard);
+	Card newCard1(dealer.giveCardID());
+	Card newCard2(dealer.giveCardID());
+	player.addCard(newCard1);
+	dealer.addCard(newCard2);
 	if(player.getNumCards()==5){
 		dealer.openFirstCard();
 		endTurn(dealer.judge(player));

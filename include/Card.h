@@ -30,7 +30,7 @@ private:
     // your private or internal stuff goes here
 	int id;
 	int pip;
-	int suit;
+	Suit suit;
 
 };
 

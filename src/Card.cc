@@ -7,8 +7,10 @@ using namespace std;
 
 // constructor
 Card::Card(int newId)
-{
-	setID(newId);
+{	
+	suit = static_cast<Card::Suit>(newId%4);
+	pip = newId/4;
+	id = newId;
 }
 
 // Accessor: card id is an integer between 0 and 51.
@@ -37,14 +39,4 @@ Card::getSuit() const
 {
 	return suit;
 }
-
-// set id directly
-void
-Card::setID(int newId)
-{
-	suit = newId%4;
-	pip = newId/4;
-	id = newId;
-}
-
 
